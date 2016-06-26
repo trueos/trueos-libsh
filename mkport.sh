@@ -1,4 +1,4 @@
-#!/bin/sh
+b#!/bin/sh
 # Helper script which will create the port / distfiles
 # from a checked out git repo
 

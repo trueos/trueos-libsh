@@ -16,7 +16,7 @@ MAKE_ARGS=	PREFIX=${STAGEDIR}${PREFIX}
 
 USE_GITHUB=	yes
 GH_ACCOUNT=	trueos
-GH_PROJECT=	trueos-libsh
+GH_PROJECT=	trueos-libsh-next
 GH_TAGNAME=	%%GHTAG%%
 
 PLIST_FILES=	share/trueos/scripts/functions.sh
