@@ -1,5 +1,5 @@
 #!/bin/sh
-# Functions we can source for pc-bsd scripts
+# Functions we can source for trueos scripts
 # Author: Kris Moore
 # Copyright: 2012
 # License: BSD
@@ -42,7 +42,7 @@ get_mirror() {
      return
   fi
 
-  # Still no mirror? Lets try the PC-BSD FTP server...
+  # Still no mirror? Lets try the TRUEOS FTP server...
   VAL="ftp://ftp.trueos.org/pub/mirror"
   CACHED_trueos_MIRROR="$VAL"
   export VAL CACHED_trueos_MIRROR
@@ -50,7 +50,7 @@ get_mirror() {
   return 
 }
 
-# Function which returns the installed list of PC-BSD mirrors for use
+# Function which returns the installed list of TRUEOS mirrors for use
 # with the fetch command
 # Will return just a single mirror, if the user has manually specified one
 # in /usr/local/etc/trueos.conf
