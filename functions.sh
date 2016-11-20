@@ -767,11 +767,6 @@ update_grub_boot()
         fi
      fi
 
-     # If we are doing a EFI boot
-     if [ "`kenv grub.platform 2>/dev/null`" = "efi" ] ; then
-        GRUBFLAGS="$GRUBFLAGS --efi-directory=/boot/efi --removable --target=x86_64-efi"
-     fi
-
      # Check encryption
      zpool status | grep -q '\.eli '
      if [ $? -eq 0 ] ; then
@@ -789,11 +784,25 @@ update_grub_boot()
      disk=`echo $disk | sed 's|p[1-9]$||g' | sed 's|p[1-9][0-9]$||g' | sed "s|s[1-9][a-z]$||g" | sed "s|s[1-9]$||g"`
      if [ ! -e "/dev/${disk}" ] ; then continue; fi
 
+     # If we are doing a EFI boot
+     if [ "`kenv grub.platform 2>/dev/null`" = "efi" ] ; then
+        GRUBFLAGS="$GRUBFLAGS --efi-directory=/boot/efi --removable --target=x86_64-efi"
+	if [ ! -d "/boot/efi" ] ; then
+	  mkdir -p /boot/efi
+	fi
+	EFIPART=`gpart show ${disk} | grep ' efi ' | awk '{print $3}'`
+	mount_msdosfs /dev/${disk}p${EFIPART} /boot/efi
+	if [ $? -ne 0 ] ; then
+	  echo "Warning: Failed to mount EFI partition!"
+	fi
+     fi
+
      # Re-install GRUB on this disk
      echo "Installing GRUB to $disk" >&2
-     grub-install $GRUBFLAGS /dev/${disk} 2>/dev/null
-     if [ $? -ne 0 ] ; then
-       grub-install /dev/${disk}
+     grub-install $GRUBFLAGS /dev/${disk}
+
+     if [ "`kenv grub.platform 2>/dev/null`" = "efi" ] ; then
+	umount /boot/efi
      fi
   done
 
